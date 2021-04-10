@@ -2,6 +2,7 @@ package com.waleed.worldclock;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +31,9 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
     private ArrayList<String> mDataTemp;
     private int mSize;
     private LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
     private Context context;
     public ArrayList<String> selected = new ArrayList<String>();
+    public boolean restrictor = false;
 
     MyRecyclerViewStringAdapter(Context context, ArrayList<String> d) {
         this.context = context;
@@ -42,8 +43,7 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
         this.mSize = d.size();
         try {
             load(this.context);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -58,15 +58,19 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.myChkBox.setText(fixText(mData.get(position)));
-        if (this.selected.contains(mData.get(position))){
-            holder.myChkBox.setChecked(true);
+        holder.myChkBox.setOnCheckedChangeListener(null);
+
+        if (selected.contains(mData.get(position)) && !restrictor) {
+                holder.myChkBox.setChecked(true);
+        }else{
+            holder.myChkBox.setChecked(false);
         }
         holder.myChkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked ) {
                     selected.add(mData.get(position));
-                }else {
+                } else {
                     selected.remove(mData.get(position));
                 }
             }
@@ -84,8 +88,7 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
         return filtered;
     } // filter results
 
-    private Filter filtered = new Filter(){
-
+    private Filter filtered = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             ArrayList<String> filteredList = new ArrayList<String>();
@@ -110,7 +113,9 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
             mData.clear();
             mData.addAll((ArrayList<String>) results.values);
             mSize = mData.size();
+            restrictor = true;
             notifyDataSetChanged();
+            restrictor = false;
         }
     };
 
@@ -124,39 +129,24 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
         }
     }
 
-    // convenience method for getting data at click position
-    String getItem(int id) {
-        return mData.get(id);
-    }
-
-    // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
-    }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public void save(Context context){
+    public void save(Context context) {
         SharedPreferences pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         Set<String> set = new HashSet<String>(this.selected);
         editor.putStringSet("Selected", set);
         editor.commit();
     }
-    public void load(Context context){
+
+    public void load(Context context) {
         SharedPreferences pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
         Set<String> set = pref.getStringSet("Selected", null);
-        if (!set.isEmpty()){
+        if (!set.isEmpty()) {
             this.selected.clear();
             this.selected = new ArrayList<String>(set);
         }
-
     }
 
-    public String fixText(String s){
+    public String fixText(String s) {
         String[] c_name = s.split(", ");
         return c_name[0];
     }

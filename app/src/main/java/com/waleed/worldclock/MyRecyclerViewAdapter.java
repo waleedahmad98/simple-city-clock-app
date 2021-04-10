@@ -18,7 +18,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private ArrayList<Entry> mData; // data array
     private int mSize; // size
     private LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
     private Context context;
 
     // data is passed into the constructor
@@ -59,18 +58,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         }
     }
 
-
-    Entry getItem(int id) {
-        return mData.get(id);
-    }
-
-    void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
-    }
-
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
 
     public void updateTimes(){ // function to update times
         for (Entry e:mData){
