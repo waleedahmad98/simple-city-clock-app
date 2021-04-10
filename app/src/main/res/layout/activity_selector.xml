@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#E12B2B2B"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/all_cities"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="278dp"
+        android:layout_height="283dp"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_alignRight="@id/all_cities"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="true"
+        android:baselineAlignBottom="true"
+        android:clickable="true"
+        android:contentDescription="@android:string/ok"
+        android:focusable="true"
+        app:srcCompat="@android:drawable/ic_menu_save" />
+
+
+</RelativeLayout>
