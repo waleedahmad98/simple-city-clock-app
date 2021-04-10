@@ -34,16 +34,20 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
     private Context context;
     public ArrayList<String> selected = new ArrayList<String>();
 
-    // data is passed into the constructor
     MyRecyclerViewStringAdapter(Context context, ArrayList<String> d) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = d;
         this.mDataTemp = new ArrayList<String>(mData);
         this.mSize = d.size();
+        try {
+            load(this.context);
+        }
+        catch(Exception e){
+
+        }
     }
 
-    // inflates the cell layout from xml when needed
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,10 +55,12 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
         return new ViewHolder(view);
     }
 
-    // binds the data to the TextView in each cell
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.myChkBox.setText(fixText(mData.get(position)));
+        if (this.selected.contains(mData.get(position))){
+            holder.myChkBox.setChecked(true);
+        }
         holder.myChkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -76,7 +82,7 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
     @Override
     public Filter getFilter() {
         return filtered;
-    }
+    } // filter results
 
     private Filter filtered = new Filter(){
 
@@ -100,7 +106,7 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
 
 
         @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
+        protected void publishResults(CharSequence constraint, FilterResults results) { // publish filtered results
             mData.clear();
             mData.addAll((ArrayList<String>) results.values);
             mSize = mData.size();
@@ -110,17 +116,11 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
 
 
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         CheckBox myChkBox;
         ViewHolder(View itemView) {
             super(itemView);
             myChkBox = itemView.findViewById(R.id.checkBox);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -148,7 +148,7 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
     }
     public void load(Context context){
         SharedPreferences pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
-        Set<String> set = pref.getStringSet("Selection", null);
+        Set<String> set = pref.getStringSet("Selected", null);
         if (!set.isEmpty()){
             this.selected.clear();
             this.selected = new ArrayList<String>(set);

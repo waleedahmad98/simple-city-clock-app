@@ -45,35 +45,35 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
 
-    MyRecyclerViewAdapter adapter;
-    public ArrayList<Entry> cities = new ArrayList<Entry>();
-    Handler timerHandler;
+    MyRecyclerViewAdapter adapter; // adapter
+    public ArrayList<Entry> cities = new ArrayList<Entry>(); // array to send to adapter for display
+    Handler timerHandler; // handler event to make clock un every second
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         try {
-            cities.addAll(this.load(this));
+            cities.addAll(this.load(this)); // load array from local database (shared preference)
         }
-        catch (Exception e){
+        catch (Exception e){ // catch nothing
 
         }
         finally {
-            RecyclerView recyclerView = findViewById(R.id.rvNumbers);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            adapter = new MyRecyclerViewAdapter(this, cities);
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+            RecyclerView recyclerView = findViewById(R.id.rvNumbers); // find cells
+            recyclerView.setLayoutManager(new LinearLayoutManager(this)); // set layout to linear layout
+            adapter = new MyRecyclerViewAdapter(this, cities); // initialize adapter
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton); // create floating action button
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(MainActivity.this, selectorActivity.class);
                     startActivity(intent);
-                    finish();
+                    finish(); // new activity
                 }
             });
-            recyclerView.setAdapter(adapter);
-            timerHandler = new Handler();
+            recyclerView.setAdapter(adapter); // set adapter
+            timerHandler = new Handler(); // start handler
             timerHandler.postDelayed(timerRunnable, 1000);
         }
     }
@@ -81,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
     Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
-            adapter.updateTimes();
-            adapter.notifyDataSetChanged();
-            timerHandler.postDelayed(this, 1000); //run every second
+            adapter.updateTimes(); // update all times
+            adapter.notifyDataSetChanged(); // notify recycler view change
+            timerHandler.postDelayed(this, 1000); // recursively run handler
         }
     };
 
-    public ArrayList<Entry> load(Context context){
+    public ArrayList<Entry> load(Context context){ // load from shared preference
         SharedPreferences pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
         Set<String> set = pref.getStringSet("Selected", null);
         ArrayList<Entry> temp = new ArrayList<Entry>();

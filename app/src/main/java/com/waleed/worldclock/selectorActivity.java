@@ -49,7 +49,7 @@ public class selectorActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    public void onBackPressed(){
+    public void onBackPressed(){ // load main activity on back press
         Intent i = new Intent(this,MainActivity.class);
         startActivity(i);
         finish();
