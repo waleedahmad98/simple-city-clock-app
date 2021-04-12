@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.waleed.worldclock.Entry;
 import com.waleed.worldclock.MyRecyclerViewAdapter;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             RecyclerView recyclerView = findViewById(R.id.rvNumbers); // find cells
             recyclerView.setLayoutManager(new LinearLayoutManager(this)); // set layout to linear layout
             adapter = new MyRecyclerViewAdapter(this, cities); // initialize adapter
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton); // create floating action button
+            ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) findViewById(R.id.floatingActionButton); // create floating action button
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

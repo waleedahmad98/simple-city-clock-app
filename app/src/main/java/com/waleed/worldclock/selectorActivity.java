@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class selectorActivity extends AppCompatActivity {
         String[] all_cities = {"Lahore, Asia/Karachi", "New York, America/New_York", "Madrid, Europe/Madrid", "Dhaka, Asia/Dhaka", "Sydney, Australia/Sydney", "Dubai, Asia/Dubai","Paris, Europe/Paris","Sao Tome, Africa/Sao_Tome","Abidjan, Africa/Abidjan", "Dominica, America/Dominica", "Riyadh, Asia/Riyadh", "Tokyo, Asia/Tokyo", "Eucla, Australia/Eucla", "Santiago, America/Santiago", "Metlakatla, America/Metlakatla", "Karachi, Asia/Karachi", "Islamabad, Asia/Karachi"};
         ArrayList<String> all_cities_list  = new ArrayList<String>();
         Collections.addAll(all_cities_list, all_cities);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
