@@ -27,11 +27,12 @@ import java.util.Set;
 
 public class selectorActivity extends AppCompatActivity {
     MyRecyclerViewStringAdapter adapter;
+    DBManager DBM = new DBManager(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selector);
-
+        DBM.open();
         String[] all_cities = {"Lahore, Asia/Karachi", "New York, America/New_York", "Madrid, Europe/Madrid", "Dhaka, Asia/Dhaka", "Sydney, Australia/Sydney", "Dubai, Asia/Dubai","Paris, Europe/Paris","Sao Tome, Africa/Sao_Tome","Abidjan, Africa/Abidjan", "Dominica, America/Dominica", "Riyadh, Asia/Riyadh", "Tokyo, Asia/Tokyo", "Eucla, Australia/Eucla", "Santiago, America/Santiago", "Metlakatla, America/Metlakatla", "Karachi, Asia/Karachi", "Islamabad, Asia/Karachi"};
         ArrayList<String> all_cities_list  = new ArrayList<String>();
         Collections.addAll(all_cities_list, all_cities);
@@ -39,7 +40,7 @@ public class selectorActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.save(view.getContext());
+                adapter.save(DBM);
                 Toast.makeText(view.getContext(), "Updated Cities!", Toast.LENGTH_SHORT).show();
 
             }
@@ -47,7 +48,7 @@ public class selectorActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.all_cities);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyRecyclerViewStringAdapter(this, all_cities_list);
+        adapter = new MyRecyclerViewStringAdapter(this, all_cities_list, DBM);
         recyclerView.setAdapter(adapter);
 
     }
@@ -79,4 +80,6 @@ public class selectorActivity extends AppCompatActivity {
         });
         return true;
     }
+
+
 }

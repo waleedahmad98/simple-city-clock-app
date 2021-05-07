@@ -2,6 +2,7 @@ package com.waleed.worldclock;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,17 +36,15 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
     public ArrayList<String> selected = new ArrayList<String>();
     public boolean restrictor = false;
 
-    MyRecyclerViewStringAdapter(Context context, ArrayList<String> d) {
+    MyRecyclerViewStringAdapter(Context context, ArrayList<String> d, DBManager DBM) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = d;
         this.mDataTemp = new ArrayList<String>(mData);
         this.mSize = d.size();
         try {
-            load(this.context);
-        } catch (Exception e) {
-
-        }
+            load(DBM);
+        } catch (Exception e) { }
     }
 
     @Override
@@ -129,21 +128,17 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
         }
     }
 
-    public void save(Context context) {
-        SharedPreferences pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        Set<String> set = new HashSet<String>(this.selected);
-        editor.putStringSet("Selected", set);
-        editor.commit();
+    public void save(DBManager DBM) {
+        DBM.update(selected);
     }
 
-    public void load(Context context) {
-        SharedPreferences pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
-        Set<String> set = pref.getStringSet("Selected", null);
-        if (!set.isEmpty()) {
+    public void load(DBManager DBM) {
+        ArrayList<String> temp = DBM.fetch();
+        if (!temp.isEmpty()) {
             this.selected.clear();
-            this.selected = new ArrayList<String>(set);
+            this.selected = temp;
         }
+
     }
 
     public String fixText(String s) {

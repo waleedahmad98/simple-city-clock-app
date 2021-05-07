@@ -49,11 +49,12 @@ public class MainActivity extends AppCompatActivity {
     MyRecyclerViewAdapter adapter; // adapter
     public ArrayList<Entry> cities = new ArrayList<Entry>(); // array to send to adapter for display
     Handler timerHandler; // handler event to make clock un every second
-
+    DBManager DBM = new DBManager(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DBM.open();
         try {
             cities.addAll(this.load(this)); // load array from local database (shared preference)
         }
@@ -89,10 +90,9 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public ArrayList<Entry> load(Context context){ // load from shared preference
-        SharedPreferences pref = context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
-        Set<String> set = pref.getStringSet("Selected", null);
-        ArrayList<Entry> temp = new ArrayList<Entry>();
-        for (String e:set){
+        ArrayList<String> read = DBM.fetch();
+        ArrayList<Entry> temp = new ArrayList<>();
+        for (String e:read){
             Calendar cal = Calendar.getInstance();
             String[] true_name = e.split(", ");
             cal.setTimeZone(TimeZone.getTimeZone(true_name[1]));
