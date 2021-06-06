@@ -30,18 +30,40 @@ public class DBManager {
     }
 
     public void update(ArrayList<String> selected) {
-        database.execSQL("DELETE FROM " + DatabaseHelper.TABLE_NAME);
+        database.execSQL("DELETE FROM " + DatabaseHelper.SELECTED);
 
         for (String s : selected) {
             ContentValues contentValue = new ContentValues();
             contentValue.put(DatabaseHelper.CITY, s);
-            database.insert(DatabaseHelper.TABLE_NAME, null, contentValue);
+            database.insert(DatabaseHelper.SELECTED, null, contentValue);
         }
+    }
+
+    public void insert(String s) {
+
+            ContentValues contentValue = new ContentValues();
+            contentValue.put(DatabaseHelper.TMZN, s);
+            database.insert(DatabaseHelper.TZ_MAP, null, contentValue);
+
     }
 
     public ArrayList<String> fetch() {
         String[] columns = new String[] { DatabaseHelper._ID, DatabaseHelper.CITY };
-        Cursor cursor = database.query(DatabaseHelper.TABLE_NAME, columns, null, null, null, null, null);
+        Cursor cursor = database.query(DatabaseHelper.SELECTED, columns, null, null, null, null, null);
+        ArrayList<String> s = new ArrayList<String>();
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                String name = cursor.getString(1);
+                s.add(name);
+                cursor.moveToNext();
+            }
+        }
+        return s;
+    }
+
+    public ArrayList<String> fetchAllCities() {
+        String[] columns = new String[] { DatabaseHelper._ID, DatabaseHelper.TMZN };
+        Cursor cursor = database.query(DatabaseHelper.TZ_MAP, columns, null, null, null, null, null);
         ArrayList<String> s = new ArrayList<String>();
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {

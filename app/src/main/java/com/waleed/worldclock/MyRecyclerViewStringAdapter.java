@@ -145,4 +145,13 @@ public class MyRecyclerViewStringAdapter extends RecyclerView.Adapter<MyRecycler
         String[] c_name = s.split(", ");
         return c_name[0];
     }
+
+    public void updateData(ArrayList<String> s){
+        this.mData.clear();
+        this.mData.addAll(s);
+        this.mSize = this.mData.size();
+        this.mDataTemp.clear();
+        this.mDataTemp.addAll(s);
+        notifyDataSetChanged();
+    }
 }

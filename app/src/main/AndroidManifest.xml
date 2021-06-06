@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/my_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WorldClock">
-        <activity android:name=".selectorActivity"></activity>
+        <activity android:name=".selectorActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
